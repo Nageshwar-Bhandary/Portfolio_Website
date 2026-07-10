@@ -83,37 +83,8 @@ const SocialIcons = () => {
       <a
         className="resume-button"
         href={`${import.meta.env.BASE_URL || "/"}resume.pdf`}
-        download="Nageshwar_Bhandary_Resume.pdf"
         target="_blank"
         rel="noopener noreferrer"
-        onClick={(e) => {
-          if (window.location.protocol === "file:") {
-            return;
-          }
-          e.preventDefault();
-          const basePath = import.meta.env.BASE_URL || "/";
-          const resumeUrl = `${basePath.endsWith("/") ? basePath : basePath + "/"}resume.pdf`;
-          fetch(resumeUrl)
-            .then((res) => {
-              if (!res.ok) throw new Error("Resume not found");
-              return res.blob();
-            })
-            .then((blob) => {
-              const url = window.URL.createObjectURL(blob);
-              const link = document.createElement("a");
-              link.style.display = "none";
-              link.href = url;
-              link.download = "Nageshwar_Bhandary_Resume.pdf";
-              document.body.appendChild(link);
-              link.click();
-              document.body.removeChild(link);
-              window.URL.revokeObjectURL(url);
-            })
-            .catch((err) => {
-              console.error("Resume blob fetch failed, falling back to direct navigation:", err);
-              window.location.href = resumeUrl;
-            });
-        }}
       >
         <HoverLinks text="RESUME" />
         <span>

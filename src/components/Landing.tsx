@@ -24,7 +24,7 @@ const Landing = ({ children }: PropsWithChildren) => {
             <div className="landing-info-h2" style={{ display: "none" }}></div>
             
             <a 
-              href="#" 
+              href={`${import.meta.env.BASE_URL || "/"}resume.pdf`} 
               target="_blank" 
               rel="noopener noreferrer" 
               className="resume-download-btn"

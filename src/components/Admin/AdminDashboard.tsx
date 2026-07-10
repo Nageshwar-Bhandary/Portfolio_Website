@@ -58,9 +58,13 @@ const AdminDashboard = ({ show, onClose }: AdminDashboardProps) => {
     };
     if (show) {
       window.addEventListener("keydown", handleKeyDown);
+      document.body.style.overflow = "hidden";
+    } else {
+      document.body.style.overflow = "auto";
     }
     return () => {
       window.removeEventListener("keydown", handleKeyDown);
+      document.body.style.overflow = "auto";
     };
   }, [show]);
 
@@ -439,7 +443,7 @@ const AdminDashboard = ({ show, onClose }: AdminDashboardProps) => {
               </button>
             </div>
 
-            <div className="admin-main-content">
+            <div className="admin-content-area">
               {/* Tab 1: General Settings */}
               {activeTab === "general" && (
                 <div>
@@ -522,9 +526,21 @@ const AdminDashboard = ({ show, onClose }: AdminDashboardProps) => {
                   {isAddingExperience || editingExperienceIdx !== null ? (
                     // Add/Edit Experience Form
                     <div className="admin-form-container">
-                      <h3>
-                        {editingExperienceIdx !== null ? "Edit Experience Item" : "Add Experience Item"}
-                      </h3>
+                      <div style={{ display: "flex", justifyContent: "space-between", alignItems: "center", marginBottom: "15px" }}>
+                        <h3 style={{ margin: 0 }}>
+                          {editingExperienceIdx !== null ? "Edit Experience Item" : "Add Experience Item"}
+                        </h3>
+                        <button
+                          onClick={() => {
+                            setIsAddingExperience(false);
+                            setEditingExperienceIdx(null);
+                          }}
+                          className="admin-btn-secondary"
+                          style={{ padding: "6px 12px", fontSize: "13px" }}
+                        >
+                          ← Go Back
+                        </button>
+                      </div>
                       <div className="admin-form-group">
                         <label>Company / Organization</label>
                         <input
@@ -640,7 +656,19 @@ const AdminDashboard = ({ show, onClose }: AdminDashboardProps) => {
                   {isAddingProject || editingProjectIdx !== null ? (
                     // Add/Edit Project Form
                     <div className="admin-form-container">
-                      <h3>{editingProjectIdx !== null ? "Edit Project Details" : "Add New Project"}</h3>
+                      <div style={{ display: "flex", justifyContent: "space-between", alignItems: "center", marginBottom: "15px" }}>
+                        <h3 style={{ margin: 0 }}>{editingProjectIdx !== null ? "Edit Project Details" : "Add New Project"}</h3>
+                        <button
+                          onClick={() => {
+                            setIsAddingProject(false);
+                            setEditingProjectIdx(null);
+                          }}
+                          className="admin-btn-secondary"
+                          style={{ padding: "6px 12px", fontSize: "13px" }}
+                        >
+                          ← Go Back
+                        </button>
+                      </div>
                       <div className="admin-form-group">
                         <label>Project Title</label>
                         <input
@@ -763,7 +791,19 @@ const AdminDashboard = ({ show, onClose }: AdminDashboardProps) => {
                   {isAddingCareer || editingCareerIdx !== null ? (
                     // Add/Edit Career Form
                     <div className="admin-form-container">
-                      <h3>{editingCareerIdx !== null ? "Edit Education Entry" : "Add Education Entry"}</h3>
+                      <div style={{ display: "flex", justifyContent: "space-between", alignItems: "center", marginBottom: "15px" }}>
+                        <h3 style={{ margin: 0 }}>{editingCareerIdx !== null ? "Edit Education Entry" : "Add Education Entry"}</h3>
+                        <button
+                          onClick={() => {
+                            setIsAddingCareer(false);
+                            setEditingCareerIdx(null);
+                          }}
+                          className="admin-btn-secondary"
+                          style={{ padding: "6px 12px", fontSize: "13px" }}
+                        >
+                          ← Go Back
+                        </button>
+                      </div>
                       <div className="admin-form-group">
                         <label>Degree / Title</label>
                         <input
@@ -855,7 +895,19 @@ const AdminDashboard = ({ show, onClose }: AdminDashboardProps) => {
                   {isAddingAchievement || editingAchievementIdx !== null ? (
                     // Add/Edit Achievement Form
                     <div className="admin-form-container">
-                      <h3>{editingAchievementIdx !== null ? "Edit Key Achievement" : "Add Achievement Item"}</h3>
+                      <div style={{ display: "flex", justifyContent: "space-between", alignItems: "center", marginBottom: "15px" }}>
+                        <h3 style={{ margin: 0 }}>{editingAchievementIdx !== null ? "Edit Key Achievement" : "Add Achievement Item"}</h3>
+                        <button
+                          onClick={() => {
+                            setIsAddingAchievement(false);
+                            setEditingAchievementIdx(null);
+                          }}
+                          className="admin-btn-secondary"
+                          style={{ padding: "6px 12px", fontSize: "13px" }}
+                        >
+                          ← Go Back
+                        </button>
+                      </div>
                       <div className="admin-form-group">
                         <label>Achievement Description</label>
                         <textarea

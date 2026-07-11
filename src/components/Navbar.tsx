@@ -13,6 +13,7 @@ import {
   TbCpu,
   TbMail,
   TbShieldLock,
+  TbFileDescription
 } from "react-icons/tb";
 
 gsap.registerPlugin(ScrollTrigger);
@@ -35,6 +36,7 @@ const NAV_SECTIONS = [
   { href: "#achievements", label: "ACHIEVEMENTS", icon: TbTrophy },
   { href: "#work",         label: "PROJECTS",     icon: TbLayoutGrid },
   { href: "#techstack",    label: "TECHSTACK",    icon: TbCpu },
+  { href: "#resume",       label: "RESUME",       icon: TbFileDescription },
   { href: "#contact",      label: "CONTACT",      icon: TbMail },
 ];
 

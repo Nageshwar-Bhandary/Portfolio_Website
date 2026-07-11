@@ -4,7 +4,6 @@ import { gsap } from "gsap";
 import About from "./About";
 import Career from "./Career";
 import Achievements from "./Achievements";
-import Cursor from "./Cursor";
 import Landing from "./Landing";
 import Navbar from "./Navbar";
 import WhatIDo from "./WhatIDo";
@@ -12,6 +11,7 @@ import Work from "./Work";
 import Contact from "./Contact";
 import setSplitText from "./utils/splitText";
 import TechStack from "./TechStack";
+import Resume from "./Resume";
 
 const MainContainer = ({ children }: PropsWithChildren) => {
   const [isDesktopView, setIsDesktopView] = useState<boolean>(
@@ -39,6 +39,7 @@ const MainContainer = ({ children }: PropsWithChildren) => {
       "#achievements",
       "#work",
       "#techstack",
+      "#resume",
       "#contact"
     ];
 
@@ -118,12 +119,15 @@ const MainContainer = ({ children }: PropsWithChildren) => {
       return (
         el.closest(".admin-dashboard") !== null ||
         el.closest(".certificate-modal-overlay") !== null ||
+        el.closest(".resume-modal-overlay") !== null ||
         el.closest("textarea") !== null ||
         el.closest("input") !== null
       );
     };
 
     const handleWheel = (e: WheelEvent) => {
+      if (document.querySelector('.resume-modal-overlay')) return;
+      if (document.querySelector('.certificate-modal-overlay')) return;
       if (isScrollable(e.target as HTMLElement)) return;
       e.preventDefault();
       if (isScrolling) return;
@@ -136,6 +140,8 @@ const MainContainer = ({ children }: PropsWithChildren) => {
     };
 
     const handleKeyDown = (e: KeyboardEvent) => {
+      if (document.querySelector('.resume-modal-overlay')) return;
+      if (document.querySelector('.certificate-modal-overlay')) return;
       if (isScrollable(e.target as HTMLElement)) return;
       if (isScrolling) return;
       if (["ArrowDown", "PageDown"].includes(e.key)) {
@@ -166,11 +172,15 @@ const MainContainer = ({ children }: PropsWithChildren) => {
     };
 
     const handleTouchMove = (e: TouchEvent) => {
+      if (document.querySelector('.resume-modal-overlay')) return;
+      if (document.querySelector('.certificate-modal-overlay')) return;
       if (isScrollable(e.target as HTMLElement)) return;
       e.preventDefault();
     };
 
     const handleTouchEnd = (e: TouchEvent) => {
+      if (document.querySelector('.resume-modal-overlay')) return;
+      if (document.querySelector('.certificate-modal-overlay')) return;
       if (isScrollable(e.target as HTMLElement)) return;
       if (isScrolling) return;
       const touchEndY = e.changedTouches[0].clientY;
@@ -213,7 +223,6 @@ const MainContainer = ({ children }: PropsWithChildren) => {
   }, []);
   return (
     <div className="container-main">
-      <Cursor />
       <Navbar />
       {isDesktopView && children}
       <div id="smooth-wrapper">
@@ -226,6 +235,7 @@ const MainContainer = ({ children }: PropsWithChildren) => {
             <Achievements />
             <Work />
             {isDesktopView && <TechStack />}
+            <Resume />
             <Contact />
           </div>
         </div>

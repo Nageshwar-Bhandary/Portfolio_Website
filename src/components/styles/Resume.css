@@ -1,0 +1,281 @@
+.resume-section {
+  width: 100%;
+  background-color: var(--backgroundColor);
+  position: relative;
+  z-index: 8;
+  box-sizing: border-box;
+  min-height: 100vh;
+  padding-top: 120px;
+  padding-bottom: 50px;
+}
+
+.resume-container {
+  max-width: var(--cWidth);
+  margin: 0 auto;
+  padding: 0 20px;
+  box-sizing: border-box;
+  height: 100%;
+  display: flex;
+  flex-direction: column;
+}
+
+.resume-container h2 {
+  font-size: 45px;
+  font-weight: 500;
+  text-transform: uppercase;
+  margin-top: 0;
+  margin-bottom: 20px;
+  letter-spacing: 1px;
+}
+
+.resume-container h2 span {
+  color: var(--accentColor);
+}
+
+/* Responsive Card Grid */
+.resume-grid {
+  display: grid;
+  flex: 1;
+  min-height: 0;
+  gap: 20px;
+  padding-bottom: 10px;
+  box-sizing: border-box;
+  grid-template-columns: repeat(2, 1fr);
+}
+
+@media screen and (max-width: 767px) {
+  .resume-grid {
+    grid-template-columns: 1fr;
+    grid-template-rows: auto auto;
+    gap: 15px;
+  }
+}
+
+/* Card Design (Glassmorphic) */
+.resume-card {
+  background: rgba(194, 164, 255, 0.02);
+  border: 1px solid rgba(194, 164, 255, 0.1);
+  border-radius: 16px;
+  padding: 20px;
+  display: flex;
+  flex-direction: column;
+  height: 100%;
+  box-sizing: border-box;
+  transition: all 0.3s cubic-bezier(0.16, 1, 0.3, 1);
+  position: relative;
+  overflow: hidden;
+}
+
+.resume-card:hover {
+  transform: translateY(-4px);
+  background: rgba(194, 164, 255, 0.05);
+  border-color: rgba(194, 164, 255, 0.3);
+  box-shadow: 0 10px 25px rgba(194, 164, 255, 0.12), 0 0 15px rgba(194, 164, 255, 0.08);
+}
+
+/* Image Wrapper */
+.resume-image-wrapper {
+  position: relative;
+  width: 100%;
+  height: 200px;
+  border-radius: 10px;
+  overflow: hidden;
+  background: rgba(0, 0, 0, 0.3);
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  margin-bottom: 15px;
+}
+
+.resume-placeholder {
+  width: 100%;
+  height: 100%;
+  background: linear-gradient(135deg, rgba(194, 164, 255, 0.03) 0%, rgba(11, 8, 12, 0.5) 100%);
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  transition: all 0.4s cubic-bezier(0.16, 1, 0.3, 1);
+}
+
+.resume-placeholder-icon {
+  width: 48px;
+  height: 48px;
+  color: var(--accentColor);
+  opacity: 0.8;
+}
+
+.resume-card:hover .resume-placeholder {
+  transform: scale(1.05);
+}
+
+/* Card Info styling */
+.resume-info {
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+  flex: 1;
+}
+
+.resume-title {
+  font-size: 20px;
+  font-weight: 500;
+  color: #fff;
+  margin: 0;
+}
+
+.resume-desc {
+  font-size: 14px;
+  color: rgba(255, 255, 255, 0.6);
+  margin: 0 0 15px 0;
+  line-height: 1.5;
+  flex: 1;
+}
+
+/* Button Group */
+.resume-btn-group {
+  display: flex;
+  gap: 10px;
+}
+
+.resume-btn {
+  flex: 1;
+  background: rgba(194, 164, 255, 0.05);
+  border: 1px solid rgba(194, 164, 255, 0.2);
+  color: #eae5ec;
+  padding: 10px 0;
+  border-radius: 8px;
+  font-size: 13px;
+  font-weight: 600;
+  cursor: pointer;
+  text-align: center;
+  text-decoration: none;
+  transition: all 0.3s cubic-bezier(0.16, 1, 0.3, 1);
+  display: inline-flex;
+  justify-content: center;
+  align-items: center;
+  gap: 6px;
+}
+
+.resume-btn:hover {
+  background: var(--accentColor);
+  color: #0b080c;
+  box-shadow: 0 0 15px rgba(194, 164, 255, 0.4);
+}
+
+/* Modal Styling */
+.resume-modal-overlay {
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100vw;
+  height: 100vh;
+  background: rgba(0, 0, 0, 0.7);
+  backdrop-filter: blur(10px);
+  -webkit-backdrop-filter: blur(10px);
+  z-index: 10000;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  padding: 120px 20px 20px 20px; /* added top padding to avoid navbar overlap */
+  box-sizing: border-box;
+  animation: modalFadeIn 0.3s cubic-bezier(0.16, 1, 0.3, 1) forwards;
+}
+
+.resume-modal-content {
+  background: rgba(20, 16, 24, 0.85);
+  border: 1px solid rgba(194, 164, 255, 0.15);
+  border-radius: 24px;
+  width: 1000px;
+  height: 90vh;
+  max-width: 100%;
+  position: relative;
+  overflow: hidden;
+  box-shadow: 0 25px 60px rgba(0, 0, 0, 0.6), 0 0 40px rgba(194, 164, 255, 0.1);
+  box-sizing: border-box;
+  animation: modalScaleIn 0.35s cubic-bezier(0.16, 1, 0.3, 1) forwards;
+  display: flex;
+  flex-direction: column;
+}
+
+.resume-modal-header {
+  padding: 20px 25px;
+  border-bottom: 1px solid rgba(194, 164, 255, 0.15);
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  background: rgba(11, 8, 12, 0.6);
+}
+
+.resume-modal-header h3 {
+  margin: 0;
+  color: #fff;
+  font-size: 20px;
+  font-weight: 500;
+}
+
+.resume-modal-controls {
+  display: flex;
+  gap: 10px;
+}
+
+.resume-modal-back,
+.resume-modal-close {
+  background: rgba(255, 255, 255, 0.05);
+  border: 1px solid rgba(255, 255, 255, 0.1);
+  color: #fff;
+  width: 36px;
+  height: 36px;
+  border-radius: 50%;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  cursor: pointer;
+  transition: all 0.25s ease;
+}
+
+.resume-modal-back:hover,
+.resume-modal-close:hover {
+  background: var(--accentColor);
+  color: #0b080c;
+  border-color: var(--accentColor);
+}
+
+.resume-modal-body {
+  flex: 1;
+  width: 100%;
+  background: #fff;
+  overflow: hidden;
+}
+
+.resume-iframe {
+  width: 100%;
+  height: 100%;
+  border: none;
+}
+
+/* Animations */
+@keyframes modalFadeIn {
+  from {
+    opacity: 0;
+  }
+  to {
+    opacity: 1;
+  }
+}
+
+@keyframes modalScaleIn {
+  from {
+    opacity: 0;
+    transform: scale(0.95);
+  }
+  to {
+    opacity: 1;
+    transform: scale(1);
+  }
+}
+
+@media screen and (max-width: 900px) {
+  .resume-modal-content {
+    height: 95vh;
+  }
+}

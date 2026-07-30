@@ -94,103 +94,11 @@ const MainContainer = ({ children }: PropsWithChildren) => {
       }
     };
 
-    const scrollNext = () => {
-      if (currentIdx < activeSections.length - 1) {
-        scrollToIdx(currentIdx + 1);
-      }
-    };
-
-    const scrollPrev = () => {
-      if (currentIdx > 0) {
-        scrollToIdx(currentIdx - 1);
-      }
-    };
-
     smoother.scrollTo = (targetSelector: string) => {
       updateActiveSections();
       const idx = activeSections.indexOf(targetSelector);
       if (idx !== -1) {
         scrollToIdx(idx);
-      }
-    };
-
-    const isScrollable = (el: HTMLElement | null): boolean => {
-      if (!el) return false;
-      return (
-        el.closest(".admin-dashboard") !== null ||
-        el.closest(".certificate-modal-overlay") !== null ||
-        el.closest(".resume-modal-overlay") !== null ||
-        el.closest("textarea") !== null ||
-        el.closest("input") !== null
-      );
-    };
-
-    const handleWheel = (e: WheelEvent) => {
-      if (document.querySelector('.resume-modal-overlay')) return;
-      if (document.querySelector('.certificate-modal-overlay')) return;
-      if (isScrollable(e.target as HTMLElement)) return;
-      e.preventDefault();
-      if (isScrolling) return;
-      if (Math.abs(e.deltaY) < 15) return;
-      if (e.deltaY > 0) {
-        scrollNext();
-      } else {
-        scrollPrev();
-      }
-    };
-
-    const handleKeyDown = (e: KeyboardEvent) => {
-      if (document.querySelector('.resume-modal-overlay')) return;
-      if (document.querySelector('.certificate-modal-overlay')) return;
-      if (isScrollable(e.target as HTMLElement)) return;
-      if (isScrolling) return;
-      if (["ArrowDown", "PageDown"].includes(e.key)) {
-        e.preventDefault();
-        scrollNext();
-      } else if (["ArrowUp", "PageUp"].includes(e.key)) {
-        e.preventDefault();
-        scrollPrev();
-      } else if (e.key === "Space") {
-        e.preventDefault();
-        if (e.shiftKey) {
-          scrollPrev();
-        } else {
-          scrollNext();
-        }
-      } else if (e.key === "Home") {
-        e.preventDefault();
-        scrollToIdx(0);
-      } else if (e.key === "End") {
-        e.preventDefault();
-        scrollToIdx(activeSections.length - 1);
-      }
-    };
-
-    let touchStartY = 0;
-    const handleTouchStart = (e: TouchEvent) => {
-      touchStartY = e.touches[0].clientY;
-    };
-
-    const handleTouchMove = (e: TouchEvent) => {
-      if (document.querySelector('.resume-modal-overlay')) return;
-      if (document.querySelector('.certificate-modal-overlay')) return;
-      if (isScrollable(e.target as HTMLElement)) return;
-      e.preventDefault();
-    };
-
-    const handleTouchEnd = (e: TouchEvent) => {
-      if (document.querySelector('.resume-modal-overlay')) return;
-      if (document.querySelector('.certificate-modal-overlay')) return;
-      if (isScrollable(e.target as HTMLElement)) return;
-      if (isScrolling) return;
-      const touchEndY = e.changedTouches[0].clientY;
-      const diffY = touchStartY - touchEndY;
-      if (Math.abs(diffY) > 50) {
-        if (diffY > 0) {
-          scrollNext();
-        } else {
-          scrollPrev();
-        }
       }
     };
 
@@ -204,21 +112,11 @@ const MainContainer = ({ children }: PropsWithChildren) => {
     };
 
     window.addEventListener("scroll", handleScroll);
-    window.addEventListener("wheel", handleWheel, { passive: false });
-    window.addEventListener("keydown", handleKeyDown, { passive: false });
-    window.addEventListener("touchstart", handleTouchStart, { passive: true });
-    window.addEventListener("touchmove", handleTouchMove, { passive: false });
-    window.addEventListener("touchend", handleTouchEnd, { passive: true });
 
     return () => {
       if (scrollTimeout) window.clearTimeout(scrollTimeout);
       window.removeEventListener("scroll", handleScroll);
       window.removeEventListener("resize", updateActiveSections);
-      window.removeEventListener("wheel", handleWheel);
-      window.removeEventListener("keydown", handleKeyDown);
-      window.removeEventListener("touchstart", handleTouchStart);
-      window.removeEventListener("touchmove", handleTouchMove);
-      window.removeEventListener("touchend", handleTouchEnd);
     };
   }, []);
   return (

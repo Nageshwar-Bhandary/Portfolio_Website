@@ -1,5 +1,5 @@
 import { useState, useEffect } from "react";
-import { usePortfolio, Project, CareerItem, ExperienceItem } from "../../context/PortfolioContext";
+import { usePortfolio, Project, CareerItem, ExperienceItem, ResumeItem } from "../../context/PortfolioContext";
 import "../styles/AdminDashboard.css";
 
 type AdminDashboardProps = {
@@ -42,6 +42,10 @@ const AdminDashboard = ({ show, onClose }: AdminDashboardProps) => {
     deleteExperienceItem,
     messages,
     deleteMessage,
+    resumes,
+    addResume,
+    editResume,
+    deleteResume,
   } = usePortfolio();
 
   const handleClose = () => {
@@ -69,7 +73,7 @@ const AdminDashboard = ({ show, onClose }: AdminDashboardProps) => {
   }, [show]);
 
   // Tab State
-  const [activeTab, setActiveTab] = useState<"general" | "about" | "experience" | "projects" | "career" | "achievements" | "skills" | "messages">("general");
+  const [activeTab, setActiveTab] = useState<"general" | "about" | "experience" | "projects" | "career" | "achievements" | "skills" | "messages" | "resumes">("general");
 
   // Login credentials state
   const [username, setUsername] = useState("");
@@ -120,6 +124,15 @@ const AdminDashboard = ({ show, onClose }: AdminDashboardProps) => {
   const [expDate, setExpDate] = useState("");
   const [expDescription, setExpDescription] = useState("");
   const [expTechStack, setExpTechStack] = useState("");
+
+  // Resume Forms state
+  const [editingResumeIdx, setEditingResumeIdx] = useState<number | null>(null);
+  const [isAddingResume, setIsAddingResume] = useState(false);
+  const [resumeId, setResumeId] = useState("");
+  const [resumeTitle, setResumeTitle] = useState("");
+  const [resumeDescription, setResumeDescription] = useState("");
+  const [resumeFileUrl, setResumeFileUrl] = useState("");
+  const [resumeFileName, setResumeFileName] = useState("");
 
   const handleLogin = (e: React.FormEvent) => {
     e.preventDefault();
@@ -330,6 +343,50 @@ const AdminDashboard = ({ show, onClose }: AdminDashboardProps) => {
     }
   };
 
+  // Resumes CRUD handlers
+  const handleStartAddResume = () => {
+    setResumeId("");
+    setResumeTitle("");
+    setResumeDescription("");
+    setResumeFileUrl("");
+    setResumeFileName("");
+    setIsAddingResume(true);
+    setEditingResumeIdx(null);
+  };
+
+  const handleStartEditResume = (idx: number) => {
+    const r = resumes[idx];
+    setResumeId(r.id);
+    setResumeTitle(r.title);
+    setResumeDescription(r.description);
+    setResumeFileUrl(r.fileUrl);
+    setResumeFileName(r.fileName);
+    setEditingResumeIdx(idx);
+    setIsAddingResume(false);
+  };
+
+  const handleSaveResume = () => {
+    if (!resumeId.trim() || !resumeTitle.trim() || !resumeFileUrl.trim() || !resumeFileName.trim()) {
+      alert("Please fill in all required fields (ID, Title, File URL, File Name)!");
+      return;
+    }
+    const itemData: ResumeItem = {
+      id: resumeId,
+      title: resumeTitle,
+      description: resumeDescription,
+      fileUrl: resumeFileUrl,
+      fileName: resumeFileName,
+    };
+
+    if (editingResumeIdx !== null) {
+      editResume(editingResumeIdx, itemData);
+      setEditingResumeIdx(null);
+    } else {
+      addResume(itemData);
+      setIsAddingResume(false);
+    }
+  };
+
   if (!show) return null;
 
   return (
@@ -426,6 +483,12 @@ const AdminDashboard = ({ show, onClose }: AdminDashboardProps) => {
                 onClick={() => setActiveTab("skills")}
               >
                 Tech Skills
+              </button>
+              <button
+                className={`admin-sidebar-tab ${activeTab === "resumes" ? "active" : ""}`}
+                onClick={() => setActiveTab("resumes")}
+              >
+                Resumes
               </button>
               <button
                 className={`admin-sidebar-tab ${activeTab === "messages" ? "active" : ""}`}
@@ -997,6 +1060,115 @@ const AdminDashboard = ({ show, onClose }: AdminDashboardProps) => {
                       Add
                     </button>
                   </form>
+                </div>
+              )}
+
+              {/* Tab 9: Resumes settings */}
+              {activeTab === "resumes" && (
+                <div>
+                  {isAddingResume || editingResumeIdx !== null ? (
+                    <div className="admin-form-container">
+                      <div style={{ display: "flex", justifyContent: "space-between", alignItems: "center", marginBottom: "15px" }}>
+                        <h3 style={{ margin: 0 }}>{editingResumeIdx !== null ? "Edit Resume" : "Add Resume"}</h3>
+                        <button
+                          onClick={() => {
+                            setIsAddingResume(false);
+                            setEditingResumeIdx(null);
+                          }}
+                          className="admin-btn-secondary"
+                          style={{ padding: "6px 12px", fontSize: "13px" }}
+                        >
+                          ← Go Back
+                        </button>
+                      </div>
+                      <div className="admin-form-group">
+                        <label>ID (e.g. 1Page)</label>
+                        <input
+                          type="text"
+                          value={resumeId}
+                          onChange={(e) => setResumeId(e.target.value)}
+                        />
+                      </div>
+                      <div className="admin-form-group">
+                        <label>Title</label>
+                        <input
+                          type="text"
+                          value={resumeTitle}
+                          onChange={(e) => setResumeTitle(e.target.value)}
+                        />
+                      </div>
+                      <div className="admin-form-group">
+                        <label>Description</label>
+                        <textarea
+                          rows={3}
+                          value={resumeDescription}
+                          onChange={(e) => setResumeDescription(e.target.value)}
+                        />
+                      </div>
+                      <div className="admin-form-group">
+                        <label>File URL (e.g. /Nageshwar_Resume_1Page.pdf)</label>
+                        <input
+                          type="text"
+                          value={resumeFileUrl}
+                          onChange={(e) => setResumeFileUrl(e.target.value)}
+                        />
+                      </div>
+                      <div className="admin-form-group">
+                        <label>File Name for Download (e.g. Nageshwar_Resume_1Page.pdf)</label>
+                        <input
+                          type="text"
+                          value={resumeFileName}
+                          onChange={(e) => setResumeFileName(e.target.value)}
+                        />
+                      </div>
+                      <div style={{ display: "flex", gap: "10px" }}>
+                        <button onClick={handleSaveResume} className="admin-btn">
+                          Confirm Save
+                        </button>
+                        <button
+                          onClick={() => {
+                            setIsAddingResume(false);
+                            setEditingResumeIdx(null);
+                          }}
+                          className="admin-btn-secondary"
+                        >
+                          Cancel
+                        </button>
+                      </div>
+                    </div>
+                  ) : (
+                    <div>
+                      <div
+                        style={{
+                          display: "flex",
+                          justifyContent: "space-between",
+                          alignItems: "center",
+                          marginBottom: "20px",
+                        }}
+                      >
+                        <h3 style={{ margin: 0 }}>Manage Resumes</h3>
+                        <button onClick={handleStartAddResume} className="admin-btn" style={{ padding: "8px 16px" }}>
+                          + Add Resume
+                        </button>
+                      </div>
+                      {resumes.map((resume, idx) => (
+                        <div className="admin-item-row" key={idx}>
+                          <div className="admin-item-title">
+                            <h5>{resume.title}</h5>
+                            <p>{resume.fileName}</p>
+                          </div>
+                          <div className="admin-action-btns">
+                            <button onClick={() => handleStartEditResume(idx)} className="admin-mini-btn edit">
+                              Edit
+                            </button>
+                            <button onClick={() => deleteResume(idx)} className="admin-mini-btn delete">
+                              Delete
+                            </button>
+                          </div>
+                        </div>
+                      ))}
+                    </div>
+                  )}
                 </div>
               )}
 

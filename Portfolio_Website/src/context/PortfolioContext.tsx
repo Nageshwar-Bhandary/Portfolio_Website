@@ -33,6 +33,14 @@ export type ContactMessage = {
   timestamp: string;
 };
 
+export type ResumeItem = {
+  id: string;
+  title: string;
+  description: string;
+  fileUrl: string;
+  fileName: string;
+};
+
 type PortfolioContextType = {
   name: string;
   roles: string[];
@@ -47,6 +55,7 @@ type PortfolioContextType = {
   skills: string[];
   experiences: ExperienceItem[];
   messages: ContactMessage[];
+  resumes: ResumeItem[];
   isAdmin: boolean;
   login: (username: string, pass: string) => boolean;
   logout: () => void;
@@ -68,6 +77,9 @@ type PortfolioContextType = {
   deleteExperienceItem: (index: number) => void;
   addMessage: (msg: ContactMessage) => void;
   deleteMessage: (index: number) => void;
+  addResume: (resume: ResumeItem) => void;
+  editResume: (index: number, resume: ResumeItem) => void;
+  deleteResume: (index: number) => void;
 };
 
 const PortfolioContext = createContext<PortfolioContextType | undefined>(undefined);
@@ -309,6 +321,26 @@ export const PortfolioProvider = ({ children }: { children: ReactNode }) => {
     return saved ? JSON.parse(saved) : [];
   });
 
+  const [resumes, setResumes] = useState<ResumeItem[]>(() => {
+    const saved = localStorage.getItem("portfolio_resumes");
+    return saved ? JSON.parse(saved) : [
+      {
+        id: "1Page",
+        title: "One Page Resume",
+        description: "Professional one-page resume for recruiters.",
+        fileUrl: "/Nageshwar_Resume_1Page.pdf",
+        fileName: "Nageshwar_Resume_1Page.pdf",
+      },
+      {
+        id: "2Page",
+        title: "Two Page Resume",
+        description: "Detailed resume with projects, internships, achievements, and technical skills.",
+        fileUrl: "/Nageshwar_Resume_2Page.pdf",
+        fileName: "Nageshwar_Resume_2Page.pdf",
+      }
+    ];
+  });
+
   const [isAdmin, setIsAdmin] = useState<boolean>(() => {
     return sessionStorage.getItem("portfolio_is_admin") === "true";
   });
@@ -445,6 +477,25 @@ export const PortfolioProvider = ({ children }: { children: ReactNode }) => {
     localStorage.setItem("portfolio_messages", JSON.stringify(updated));
   };
 
+  const addResume = (resume: ResumeItem) => {
+    const updated = [...resumes, resume];
+    setResumes(updated);
+    localStorage.setItem("portfolio_resumes", JSON.stringify(updated));
+  };
+
+  const editResume = (index: number, resume: ResumeItem) => {
+    const updated = [...resumes];
+    updated[index] = resume;
+    setResumes(updated);
+    localStorage.setItem("portfolio_resumes", JSON.stringify(updated));
+  };
+
+  const deleteResume = (index: number) => {
+    const updated = resumes.filter((_, i) => i !== index);
+    setResumes(updated);
+    localStorage.setItem("portfolio_resumes", JSON.stringify(updated));
+  };
+
   return (
     <PortfolioContext.Provider
       value={{
@@ -461,6 +512,7 @@ export const PortfolioProvider = ({ children }: { children: ReactNode }) => {
         skills,
         experiences,
         messages,
+        resumes,
         isAdmin,
         login,
         logout,
@@ -482,6 +534,9 @@ export const PortfolioProvider = ({ children }: { children: ReactNode }) => {
         deleteExperienceItem,
         addMessage,
         deleteMessage,
+        addResume,
+        editResume,
+        deleteResume,
       }}
     >
       {children}

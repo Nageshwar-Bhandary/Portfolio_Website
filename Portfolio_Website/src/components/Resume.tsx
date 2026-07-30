@@ -2,24 +2,10 @@ import { useState, useEffect } from "react";
 import { TbDownload, TbX, TbArrowLeft } from "react-icons/tb";
 import "./styles/Resume.css";
 
-const resumes = [
-  {
-    id: "1Page",
-    title: "One Page Resume",
-    description: "Professional one-page resume for recruiters.",
-    fileUrl: "/Nageshwar_Resume_1Page.pdf",
-    fileName: "Nageshwar_Resume_1Page.pdf",
-  },
-  {
-    id: "2Page",
-    title: "Two Page Resume",
-    description: "Detailed resume with projects, internships, achievements, and technical skills.",
-    fileUrl: "/Nageshwar_Resume_2Page.pdf",
-    fileName: "Nageshwar_Resume_2Page.pdf",
-  }
-];
+import { usePortfolio } from "../context/PortfolioContext";
 
 const Resume = () => {
+  const { resumes } = usePortfolio();
   const [selectedResume, setSelectedResume] = useState<string | null>(null);
 
   // Close modal on ESC key
